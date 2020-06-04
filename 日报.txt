@@ -207,3 +207,40 @@
     		searchSourceBuilder.form(1);
     		searchSourceBuilder.size(2);
     		searchSourceBuilder.sort("price",SortOrder.DESC);
+    	 3.match 查询
+        		SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+        		searchSourceBuilder.query(QueryBuilders.matchQuery("name","spring开发"));
+
+         4.multi_match查询
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+        searchSourceBuilder.query(QueryBuilders.multiMatchQuery("手机",new String[]{"name","description"}));
+
+        5.filter查询
+                    BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
+                boolQueryBuilder.must(QueryBuilders.matchQuery("name","开发"));
+                boolQueryBuilder.filter(QueryBuilders.rangeQuery("price").gte(50).lte(100));
+2020-06-04工作内容：
+    6、hignlight查询
+    			SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+    			searchSourceBuilder.query(QueryBuilders.matchQuery("name","开发"));
+
+    			HighlightBuilder highlightBuilder = new HighlightBuilder();
+    			highlightBuilder.preTags("<font color='red'>");
+    			highlightBuilder.postTags("</font>");
+    			highlightBuilder.field("name");
+
+    			searchSourceBuilder.highlighter(highlightBuilder);
+
+    七、es集群搭建
+       a、集群结构：es集群至少两台
+       b、搭建步骤
+         1、拷贝节点2，命名为ElasticSearch-2
+         2、删除节点2的data目录
+         3、修改elasticsearch.yml：
+    		node.name: usian_node_2
+    		discovery.zen.ping.unicast.hosts: ["192.168.233.134:9300", "192.168.233.135:9300"]
+         4、测试
+    	 启动两台节点：自动分配分片
+    	 关闭节点2：集群是高可用的
+    	 创建备份分配：备份分配和主分片不在同一个节点上
+
